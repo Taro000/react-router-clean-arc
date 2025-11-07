@@ -1,87 +1,46 @@
-# Welcome to React Router!
+# react-router-clean-arc
 
-A modern, production-ready template for building full-stack React applications using React Router.
+アカウント登録機能が付いたTODOリストを作る。
+UIは全く凝らない。
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## 画面一覧
 
-## Features
+- アカウント登録画面
+  - Email/PW、Google登録
+- ログイン画面
+  - Email/PW、Googleログイン
+- TODOリスト / アカウントプロフィール画面（TOP画面）
+  - ニックネーム・メールアドレスの表示
+  - TODOのリスト表示（タイトル・ステータス・期限）
+  - いいねボタン（他人のTODOの場合のみ）
+- TODO詳細画面
+  - タイトル・内容・ステータス・期限・作成日・いいね数の表示
+  - TODO編集モーダル（自分のTODOの場合のみ）
+  - いいねボタン（他人のTODOの場合のみ）
+- アカウント設定画面
+  - ニックネーム変更
+  - ログアウト
+- フィード画面
+  - 他人のTODOをリスト表示（ニックネーム・タイトル・ステータス・期限）
+  - 新着順
+  - 各TODOに遷移可能
+  - いいねボタン（他人のTODOの場合のみ）
+- サイドバー
+  - TOP画面リンク
+  - アカウント設定画面リンク
+  - フィード画面リンク
+  - TODO作成モーダル表示ボタン
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## データについて
 
-## Getting Started
+### TODO
 
-### Installation
+- タイトル：30字以内
+- 内容：1000文字以内
+- ステータス：未着手・進行中・完了・保留
+- 期限：yyyy/mm/dd hh:mm
 
-Install the dependencies:
+### アカウント
 
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- ニックネーム：20字以内
+- email
