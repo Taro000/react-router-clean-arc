@@ -44,3 +44,19 @@ UIは全く凝らない。
 
 - ニックネーム：20字以内
 - email
+
+## Firestore コレクション設計
+
+- users
+  - nickname [string]
+  - email [string]
+
+- todos
+  - owner [reference] : 所有者usersの参照
+  - title [string]
+  - content [string]
+  - status [string]
+  - due_date [timestamp]
+  - goodluck_count [number] : いいね数
+  - created_at [timestamp]
+  - updated_at [timestamp]
