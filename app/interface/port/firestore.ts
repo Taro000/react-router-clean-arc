@@ -10,20 +10,25 @@ export type Filter = {
 export interface FirestoreClient {
   createDocument: (
     collectionPath: string,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
+  ) => Promise<string>;
+  createDocumentWithId: (
+    collectionPath: string,
+    documentId: string,
+    data: Record<string, unknown>,
   ) => Promise<string>;
   updateDocument: (
     collectionPath: string,
     documentId: string,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
   ) => Promise<void>;
   getAllFilteredDocuments: (
     collectionPath: string,
-    filter?: Filter
+    filter?: Filter,
   ) => Promise<DocumentSnapshot[]>;
   getDocument: (
     collectionPath: string,
-    documentId: string
+    documentId: string,
   ) => Promise<DocumentSnapshot>;
   deleteDocument: (collectionPath: string, documentId: string) => Promise<void>;
 }

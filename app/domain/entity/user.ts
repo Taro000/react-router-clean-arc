@@ -1,3 +1,6 @@
+import { isLongerThan, isRequired } from "~/domain/service/validationRules";
+import type { ValidationError } from "~/domain/service/validationRules";
+
 /*********************************************
  * ユーザー
  **********************************************/
@@ -93,21 +96,31 @@ const validateUserNickname = (nickname: UserNickname) => {
 /*********************************************
  * メールアドレス
  **********************************************/
-type UserEmail = string;
+export type UserEmail = {
+  description: "メールアドレス";
+  value: string;
+  maxLength: 255;
+};
 
-const MAX_USER_EMAIL_LENGTH = 255;
+export const newUserEmail = (value: string): UserEmail => {
+  return {
+    description: "メールアドレス",
+    value: value,
+    maxLength: 255,
+  };
+};
 
 /**
  * メールアドレスを検証する
  * @param email - メールアドレス
- * @throws {Error} バリデーションエラー
+ * @returns バリデーションエラーの配列
  */
-const validateUserEmail = (email: UserEmail) => {
-  if (email.length > MAX_USER_EMAIL_LENGTH) {
-    throw new Error(
-      `メールアドレスは${MAX_USER_EMAIL_LENGTH}文字以内である必要があります`,
-    );
-  }
+export const validateUserEmail = (email: UserEmail): ValidationError[] => {
+  const rules = [
+    isRequired(email.value),
+    isLongerThan(email.value, email.maxLength),
+  ];
+  return rules.filter((rule) => rule !== undefined) as ValidationError[];
 };
 
 /*********************************************

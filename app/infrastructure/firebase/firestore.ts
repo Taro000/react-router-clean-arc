@@ -10,6 +10,7 @@ import {
   deleteDoc,
   updateDoc,
   serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 import type { DocumentSnapshot } from "firebase/firestore";
 import type { FirebaseApp } from "firebase/app";
@@ -33,7 +34,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const createDocument = async (
     collectionPath: string,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
   ): Promise<string> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -43,6 +44,33 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
+    } catch (error) {
+      throw new Error(`${ERROR_MESSAGE_SAVE_DOCUMENT_FAILED}: ${error}`);
+    }
+  };
+
+  /**
+   * IDを指定してドキュメントを作成する
+   * @param collectionPath - コレクションパス
+   * @param documentId - ドキュメントID
+   * @param data - データ
+   * @returns 作成したドキュメントのID
+   * @throws {Error} ドキュメントを作成できなかった場合
+   */
+  const createDocumentWithId = async (
+    collectionPath: string,
+    documentId: string,
+    data: Record<string, unknown>,
+  ): Promise<string> => {
+    try {
+      const collectionRef = collection(db, collectionPath);
+      const docRef = doc(collectionRef, documentId);
+      await setDoc(docRef, {
+        ...data,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      return documentId;
     } catch (error) {
       throw new Error(`${ERROR_MESSAGE_SAVE_DOCUMENT_FAILED}: ${error}`);
     }
@@ -60,7 +88,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
   const updateDocument = async (
     collectionPath: string,
     documentId: string,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
   ): Promise<void> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -84,7 +112,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const getAllFilteredDocuments = async (
     collectionPath: string,
-    filter?: Filter
+    filter?: Filter,
   ): Promise<DocumentSnapshot[]> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -108,7 +136,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const getDocument = async (
     collectionPath: string,
-    documentId: string
+    documentId: string,
   ): Promise<DocumentSnapshot> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -119,7 +147,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
         return docSnap;
       } else {
         throw new Error(
-          `${ERROR_MESSAGE_GET_DOCUMENT_FAILED}: ドキュメントが存在しません。`
+          `${ERROR_MESSAGE_GET_DOCUMENT_FAILED}: ドキュメントが存在しません。`,
         );
       }
     } catch (error) {
@@ -137,7 +165,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const deleteDocument = async (
     collectionPath: string,
-    documentId: string
+    documentId: string,
   ): Promise<void> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -150,6 +178,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
 
   return {
     createDocument,
+    createDocumentWithId,
     updateDocument,
     getAllFilteredDocuments,
     getDocument,

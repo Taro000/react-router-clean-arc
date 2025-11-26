@@ -1,4 +1,4 @@
-import type { Todo, TodoId } from "~/domain/entity/todo";
+import type { SearchUsersTodoQuery, Todo, TodoId } from "~/domain/entity/todo";
 import { newTodo } from "~/domain/entity/todo";
 import type { FirestoreClient, Filter } from "~/interface/port/firestore";
 import type { DocumentSnapshot } from "firebase/firestore";
@@ -34,8 +34,15 @@ export const createTodoRepository = (
     }
   };
 
-  const getAllTodos = async (filter?: Filter): Promise<Todo[]> => {
+  const getAllTodos = async (query?: SearchUsersTodoQuery): Promise<Todo[]> => {
     try {
+      const filter: Filter | undefined = query
+        ? {
+            field: String(query?.field),
+            op: "==",
+            value: String(query?.query),
+          }
+        : undefined;
       const todos = await firestore.getAllFilteredDocuments("todos", filter);
       return todos.map((todo) => convertDocumentSnapshotToTodo(todo));
     } catch (error) {

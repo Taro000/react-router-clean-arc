@@ -9,7 +9,10 @@ export const createUserRepository = (
 ): UserRepository => {
   const createUser = async (user: User): Promise<UserId> => {
     try {
-      const userId = await firestore.createDocument("users", user);
+      const userId = await firestore.createDocumentWithId("users", user.id, {
+        nickname: user.nickname,
+        email: user.email,
+      });
       return userId;
     } catch (error) {
       throw error;

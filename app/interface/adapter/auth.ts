@@ -1,15 +1,15 @@
 import type { FirebaseAuthClient } from "~/interface/port/auth";
 import type { AuthRepository } from "~/domain/repository/auth";
-import type { Auth } from "~/domain/entity/auth";
-import { newAuth } from "~/domain/entity/auth";
+import type { CredentialData, LoginRequest } from "~/domain/entity/auth";
+import { newCredentialData } from "~/domain/entity/auth";
 
-export const createFirebaseAuthClient = (
+export const createAuthRepository = (
   auth: FirebaseAuthClient,
 ): AuthRepository => {
   const createUserWithEmailPassword = async (
     email: string,
     password: string,
-  ): Promise<Auth> => {
+  ): Promise<CredentialData> => {
     try {
       const userCredential = await auth.createUserWithEmailPassword(
         email,
@@ -18,7 +18,7 @@ export const createFirebaseAuthClient = (
       const userId = userCredential.user.uid;
       const accessToken = await userCredential.user.getIdToken();
 
-      const userAuth = newAuth(userId, accessToken);
+      const userAuth = newCredentialData(userId, accessToken);
       return userAuth;
     } catch (error) {
       throw error;
@@ -26,18 +26,17 @@ export const createFirebaseAuthClient = (
   };
 
   const signInWithEmailPassword = async (
-    email: string,
-    password: string,
-  ): Promise<Auth> => {
+    loginRequest: LoginRequest,
+  ): Promise<CredentialData> => {
     try {
       const userCredential = await auth.signInWithEmailPassword(
-        email,
-        password,
+        loginRequest.email.value,
+        loginRequest.password.value,
       );
       const userId = userCredential.user.uid;
       const accessToken = await userCredential.user.getIdToken();
 
-      const userAuth = newAuth(userId, accessToken);
+      const userAuth = newCredentialData(userId, accessToken);
       return userAuth;
     } catch (error) {
       throw error;

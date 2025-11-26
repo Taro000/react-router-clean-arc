@@ -1,3 +1,5 @@
+import type { UserId } from "~/domain/entity/user";
+
 /*********************************************
  * TODO
  **********************************************/
@@ -48,31 +50,6 @@ export const newTodo = (
     };
   } catch (error) {
     throw new Error(`${ERROR_MESSAGE_TODO_CREATION_FAILED}: ${error}`);
-  }
-};
-
-const ERROR_MESSAGE_TODO_UPDATE_FAILED = `TODOの更新に失敗しました`;
-/**
- * TODOを更新する
- * @param todo - TODO
- * @returns TODO
- * @throws {Error} TODOの更新に失敗した場合
- */
-export const updateTodo = (todo: Todo): Todo => {
-  try {
-    validateTodoId(todo.id);
-    validateTodoTitle(todo.title);
-    validateTodoContent(todo.content);
-    validateTodoDueDate(todo.dueDate);
-
-    const now = new Date();
-
-    return {
-      ...todo,
-      updatedAt: now,
-    };
-  } catch (error) {
-    throw new Error(`${ERROR_MESSAGE_TODO_UPDATE_FAILED}: ${error}`);
   }
 };
 
@@ -164,3 +141,11 @@ type TodoCreatedAt = Date;
  * 更新日時
  **********************************************/
 type TodoUpdatedAt = Date;
+
+/*********************************************
+ * ユーザーのTODOを検索するクエリ
+ **********************************************/
+export type SearchUsersTodoQuery = {
+  field: "name";
+  query: UserId;
+};
