@@ -3,6 +3,52 @@
 アカウント登録機能が付いたTODOリストを作る。
 UIは全く凝らない。
 
+## アーキテクチャ概要
+<img width="1332" height="840" alt="react-router-clean-arch" src="https://github.com/user-attachments/assets/0dcb098e-b402-4cdf-980f-9d2809289728" />
+
+Domain層・UseCase層は詳細に影響を受けずに、オリジナルの型を用いて純粋なTypeScriptのコードベースを維持できる。
+
+### Domain層
+
+```
+ドメインモデルとそれを用いた純粋なビジネスロジックを配置する。
+```
+
+- **Entity**：ドメインモデルとビジネスロジック。
+- **Repository**：Interface層が実装すべきインターフェース。
+- **Service**：汎用的なビジネスロジック。
+
+### UseCase層
+
+```
+ドメイン層のメソッドとオブジェクトを組み合わせたアプリケーションロジックを配置する。
+```
+
+- **Usecase**：Interactorが実装すべきインターフェース。
+- **Interactor**：アプリケーションロジック。
+
+### Interface層
+
+```
+Infarastructure層とUseCase層/Domain層の間のデータ変換に責務を持つ。腐敗防止層。
+Infarastructure層の詳細（型など）を知っても良い。
+```
+
+- **Port**：Infrastructure層が実装すべきインターフェース。
+- **Adaptor**：変換ロジック。Domain層/Repositoryのインターフェースを実装。
+- Custom Hook：ReactのカスタムフックはViewとUseCase層とのデータ変換に責務を持たせると、Interface層に分類できる。
+
+### Infrastructure層
+
+```
+APIやDB、フレームワークなどの詳細。
+Interface層/Portのインターフェースを実装。
+```
+
+- API Client
+- DB Client
+- View：React Router v7におけるRoute。HTMLのレンダリング・イベントハンドリングのみを担当する。（Loader/Actionにロジックを入れない。）
+
 ## 画面一覧
 
 - アカウント登録画面
