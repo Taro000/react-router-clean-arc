@@ -35,7 +35,7 @@ Infarastructure層の詳細（型など）を知っても良い。
 ```
 
 - **Port**：Infrastructure層が実装すべきインターフェース。
-- **Adaptor**：変換ロジック。Domain層/Repositoryのインターフェースを実装。
+- **Adaptor**：データ変換ロジック。Domain層/Repositoryのインターフェースを実装。
 - Custom Hook：ReactのカスタムフックはViewとUseCase層とのデータ変換に責務を持たせると、Interface層に分類できる。
 
 ### Infrastructure層
