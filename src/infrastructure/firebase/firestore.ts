@@ -34,7 +34,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const createDocument = async (
     collectionPath: string,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
   ): Promise<string> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -60,7 +60,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
   const createDocumentWithId = async (
     collectionPath: string,
     documentId: string,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
   ): Promise<string> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -88,7 +88,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
   const updateDocument = async (
     collectionPath: string,
     documentId: string,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
   ): Promise<void> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -112,7 +112,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const getAllFilteredDocuments = async (
     collectionPath: string,
-    filter?: Filter
+    filter?: Filter,
   ): Promise<DocumentSnapshot[]> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -136,7 +136,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const getDocument = async (
     collectionPath: string,
-    documentId: string
+    documentId: string,
   ): Promise<DocumentSnapshot> => {
     try {
       const collectionRef = collection(db, collectionPath);
@@ -147,7 +147,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
         return docSnap;
       } else {
         throw new Error(
-          `${ERROR_MESSAGE_GET_DOCUMENT_FAILED}: ドキュメントが存在しません。`
+          `${ERROR_MESSAGE_GET_DOCUMENT_FAILED}: ドキュメントが存在しません。`,
         );
       }
     } catch (error) {
@@ -165,7 +165,7 @@ export const createFirestoreClient = (app: FirebaseApp): FirestoreClient => {
    */
   const deleteDocument = async (
     collectionPath: string,
-    documentId: string
+    documentId: string,
   ): Promise<void> => {
     try {
       const collectionRef = collection(db, collectionPath);

@@ -2,6 +2,7 @@ import { createCookieSessionStorage } from "react-router";
 
 type SessionData = {
   userId: string;
+  accessToken: string;
 };
 
 type SessionFlashData = {
@@ -12,13 +13,13 @@ const { getSession, commitSession, destroySession } =
   createCookieSessionStorage<SessionData, SessionFlashData>({
     cookie: {
       name: "__session",
-      domain: "reactrouter.com",
+      domain: "localhost",
       httpOnly: true,
-      maxAge: 60,
+      maxAge: 3600,
       path: "/",
       sameSite: "lax",
       secrets: ["s3cret1"],
-      secure: true,
+      secure: false,
     },
   });
 

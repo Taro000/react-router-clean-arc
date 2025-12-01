@@ -29,7 +29,7 @@ export const newTodo = (
   title: TodoTitle,
   content: TodoContent,
   status: TodoStatus,
-  dueDate: TodoDueDate
+  dueDate: TodoDueDate,
 ): Todo => {
   try {
     validateTodoId(id);
@@ -86,7 +86,7 @@ const MAX_TODO_TITLE_LENGTH = 30;
 const validateTodoTitle = (title: TodoTitle) => {
   if (title.length > MAX_TODO_TITLE_LENGTH) {
     throw new Error(
-      `タイトルは${MAX_TODO_TITLE_LENGTH}字以内である必要があります`
+      `タイトルは${MAX_TODO_TITLE_LENGTH}字以内である必要があります`,
     );
   }
 };
@@ -106,7 +106,7 @@ const MAX_TODO_CONTENT_LENGTH = 1000;
 const validateTodoContent = (content: TodoContent) => {
   if (content.length > MAX_TODO_CONTENT_LENGTH) {
     throw new Error(
-      `内容は${MAX_TODO_CONTENT_LENGTH}文字以内である必要があります`
+      `内容は${MAX_TODO_CONTENT_LENGTH}文字以内である必要があります`,
     );
   }
 };

@@ -1,12 +1,8 @@
 import type { AuthRepository } from "src/domain/repository/auth";
-import type { UserRepository } from "src/domain/repository/user";
-import { newUser } from "src/domain/entity/user";
-import type {
-  CredentialData,
-  LoginResponse,
-  UserPassword,
-} from "src/domain/entity/auth";
-import type { User, UserEmail, UserId } from "src/domain/entity/user";
+// import type { UserRepository } from "src/domain/repository/user";
+// import { newUser } from "src/domain/entity/user";
+import type { LoginResponse, UserPassword } from "src/domain/entity/auth";
+import type { UserEmail } from "src/domain/entity/user";
 import type { AuthUsecase } from "src/usecase/usecase/auth";
 import { newLoginRequest, newLoginResponse } from "src/domain/entity/auth";
 
@@ -16,7 +12,7 @@ import { newLoginRequest, newLoginResponse } from "src/domain/entity/auth";
  */
 export const createAuthUsecase = (
   authRepository: AuthRepository,
-  userRepository: UserRepository
+  // userRepository: UserRepository
 ): AuthUsecase => {
   /**
    * ログインする
@@ -27,7 +23,7 @@ export const createAuthUsecase = (
    */
   const login = async (
     email: UserEmail,
-    password: UserPassword
+    password: UserPassword,
   ): Promise<LoginResponse> => {
     try {
       const loginRequest = newLoginRequest(email, password);
@@ -36,52 +32,44 @@ export const createAuthUsecase = (
           undefined,
           undefined,
           loginRequest.errorMessages,
-          false
+          false,
         );
       }
       const userCredential =
         await authRepository.signInWithEmailPassword(loginRequest);
       return newLoginResponse(
         userCredential.userId,
-        userCredential.accessToken
+        userCredential.accessToken,
+        [],
+        true,
       );
     } catch (error) {
-      throw error;
+      throw new Error(`usecaseでエラーが発生しました: ${error}`);
     }
   };
 
-  const registerUser = async (
-    nickname: string,
-    email: UserEmail,
-    password: UserPassword
-  ): Promise<CredentialData> => {
-    try {
-      // ユーザーを作成する
-      const userCredential = await authRepository.createUserWithEmailPassword(
-        email.value,
-        password.value
-      );
-      // ユーザーをDBに登録する
-      const user = newUser(userCredential.userId, nickname, email);
-      await userRepository.createUser(user);
-      return userCredential;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const getUser = async (id: UserId): Promise<User> => {
-    try {
-      const user = await userRepository.getUser(id);
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  };
+  // const registerUser = async (
+  //   nickname: string,
+  //   email: UserEmail,
+  //   password: UserPassword
+  // ): Promise<CredentialData> => {
+  //   try {
+  //     // ユーザーを作成する
+  //     const userCredential = await authRepository.createUserWithEmailPassword(
+  //       email.value,
+  //       password.value
+  //     );
+  //     // ユーザーをDBに登録する
+  //     const user = newUser(userCredential.userId, nickname, email);
+  //     await userRepository.createUser(user);
+  //     return userCredential;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
 
   return {
     login,
-    registerUser,
-    getUser,
+    // registerUser,
   };
 };

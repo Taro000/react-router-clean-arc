@@ -13,7 +13,7 @@ import type { FirebaseAuthClient } from "src/interface/port/auth";
  * @returns Firebase認証クライアント
  */
 export const createFirebaseAuthClient = (
-  app: FirebaseApp
+  app: FirebaseApp,
 ): FirebaseAuthClient => {
   const auth = getAuth(app);
 
@@ -27,18 +27,18 @@ export const createFirebaseAuthClient = (
    */
   const createUserWithEmailPassword = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<UserCredential> => {
     try {
       const credential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       return credential;
     } catch (error) {
       throw new Error(
-        `${ERROR_MESSAGE_CREATE_USER_WITH_EMAIL_PASSWORD_FAILED}: ${error}`
+        `${ERROR_MESSAGE_CREATE_USER_WITH_EMAIL_PASSWORD_FAILED}: ${error}`,
       );
     }
   };
@@ -53,18 +53,18 @@ export const createFirebaseAuthClient = (
    */
   const signInWithEmailPassword = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<UserCredential> => {
     try {
       const credential = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       return credential;
     } catch (error) {
       throw new Error(
-        `${ERROR_MESSAGE_SIGN_IN_WITH_EMAIL_PASSWORD_FAILED}: ${error}`
+        `${ERROR_MESSAGE_SIGN_IN_WITH_EMAIL_PASSWORD_FAILED}: ${error}`,
       );
     }
   };

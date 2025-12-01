@@ -22,7 +22,7 @@ const ERROR_MESSAGE_USER_CREATION_FAILED = `ユーザーの作成に失敗しま
 export const newUser = (
   id: UserId,
   nickname: UserNickname,
-  email: UserEmail
+  email: UserEmail,
 ): User => {
   try {
     validateUserId(id);
@@ -58,9 +58,19 @@ export const updateUser = (user: User): User => {
 /*********************************************
  * ID
  **********************************************/
-export type UserId = string;
+export type UserId = {
+  description: "ユーザーID";
+  value: string;
+  maxLength: 36;
+};
 
-const MAX_USER_ID_LENGTH = 36;
+export const newUserId = (value: string): UserId => {
+  return {
+    description: "ユーザーID",
+    value: value,
+    maxLength: 36,
+  };
+};
 
 /**
  * ユーザーのIDを検証する
@@ -68,29 +78,38 @@ const MAX_USER_ID_LENGTH = 36;
  * @throws {Error} バリデーションエラー
  */
 const validateUserId = (id: UserId) => {
-  if (id.length > MAX_USER_ID_LENGTH) {
-    throw new Error(`IDは${MAX_USER_ID_LENGTH}文字以内である必要があります`);
-  }
+  const rules = [isLongerThan(id.value, id.maxLength)];
+  return rules.filter((rule) => rule !== undefined) as ValidationError[];
 };
 
 /*********************************************
  * ニックネーム
  **********************************************/
-type UserNickname = string;
+type UserNickname = {
+  description: "ニックネーム";
+  value: string;
+  maxLength: 20;
+};
 
-const MAX_USER_NICKNAME_LENGTH = 20;
+export const newUserNickname = (value: string): UserNickname => {
+  return {
+    description: "ニックネーム",
+    value: value,
+    maxLength: 20,
+  };
+};
 
 /**
  * ニックネームを検証する
  * @param nickname - ニックネーム
- * @throws {Error} バリデーションエラー
+ * @returns バリデーションエラーの配列
  */
-const validateUserNickname = (nickname: UserNickname) => {
-  if (nickname.length > MAX_USER_NICKNAME_LENGTH) {
-    throw new Error(
-      `ニックネームは${MAX_USER_NICKNAME_LENGTH}文字以内である必要があります`
-    );
-  }
+const validateUserNickname = (nickname: UserNickname): ValidationError[] => {
+  const rules = [
+    isRequired(nickname.value),
+    isLongerThan(nickname.value, nickname.maxLength),
+  ];
+  return rules.filter((rule) => rule !== undefined) as ValidationError[];
 };
 
 /*********************************************

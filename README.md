@@ -4,6 +4,7 @@
 UIは全く凝らない。
 
 ## アーキテクチャ概要
+
 <img width="1332" height="840" alt="react-router-clean-arch" src="https://github.com/user-attachments/assets/0dcb098e-b402-4cdf-980f-9d2809289728" />
 
 Domain層・UseCase層は詳細に影響を受けずに、オリジナルの型を用いて純粋なTypeScriptのコードベースを維持できる。

@@ -26,13 +26,13 @@ export type LoginRequest = {
  */
 export const newLoginRequest = (
   email: UserEmail,
-  password: UserPassword
+  password: UserPassword,
 ): LoginRequest => {
   let errorMessages: string[] = [];
   errorMessages = errorMessages.concat(
     validateUserEmail(email).map((error) =>
-      toErrorMessage(email.description, error, email.maxLength)
-    )
+      toErrorMessage(email.description, error, email.maxLength),
+    ),
   );
   errorMessages = errorMessages.concat(
     validateUserPassword(password).map((error) =>
@@ -40,9 +40,9 @@ export const newLoginRequest = (
         password.description,
         error,
         password.maxLength,
-        password.minLength
-      )
-    )
+        password.minLength,
+      ),
+    ),
   );
   return {
     email,
@@ -66,7 +66,7 @@ export const newLoginResponse = (
   userId: UserId | undefined,
   accessToken: AccessToken | undefined,
   errorMessages: string[] = [],
-  isValid: boolean = false
+  isValid: boolean = false,
 ): LoginResponse => {
   return { userId, accessToken, errorMessages, isValid };
 };
@@ -114,7 +114,7 @@ export type CredentialData = {
 
 export const newCredentialData = (
   userId: UserId,
-  accessToken: AccessToken
+  accessToken: AccessToken,
 ): CredentialData => {
   return { userId, accessToken };
 };

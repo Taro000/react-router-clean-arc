@@ -1,19 +1,28 @@
 import type { FirestoreClient } from "src/interface/port/firestore";
 import type { UserRepository } from "src/domain/repository/user";
 import type { User, UserId } from "src/domain/entity/user";
-import { newUser } from "src/domain/entity/user";
+import {
+  newUser,
+  newUserNickname,
+  newUserEmail,
+  newUserId,
+} from "src/domain/entity/user";
 import type { DocumentSnapshot } from "firebase/firestore";
 
 export const createUserRepository = (
-  firestore: FirestoreClient
+  firestore: FirestoreClient,
 ): UserRepository => {
   const createUser = async (user: User): Promise<UserId> => {
     try {
-      const userId = await firestore.createDocumentWithId("users", user.id, {
-        nickname: user.nickname,
-        email: user.email,
-      });
-      return userId;
+      const userId = await firestore.createDocumentWithId(
+        "users",
+        user.id.value,
+        {
+          nickname: user.nickname,
+          email: user.email,
+        },
+      );
+      return newUserId(userId);
     } catch (error) {
       throw error;
     }
@@ -21,7 +30,7 @@ export const createUserRepository = (
 
   const updateUser = async (user: User): Promise<void> => {
     try {
-      await firestore.updateDocument("users", user.id, user);
+      await firestore.updateDocument("users", user.id.value, user);
       return;
     } catch (error) {
       throw error;
@@ -30,7 +39,7 @@ export const createUserRepository = (
 
   const getUser = async (id: UserId): Promise<User> => {
     try {
-      const user = await firestore.getDocument("users", id);
+      const user = await firestore.getDocument("users", id.value);
       return convertDocumentSnapshotToUser(user);
     } catch (error) {
       throw error;
@@ -39,7 +48,7 @@ export const createUserRepository = (
 
   const deleteUser = async (id: UserId): Promise<void> => {
     try {
-      await firestore.deleteDocument("users", id);
+      await firestore.deleteDocument("users", id.value);
     } catch (error) {
       throw error;
     }
@@ -54,8 +63,12 @@ export const createUserRepository = (
  * @returns User
  */
 const convertDocumentSnapshotToUser = (
-  documentSnapshot: DocumentSnapshot
+  documentSnapshot: DocumentSnapshot,
 ): User => {
   const data = documentSnapshot.data();
-  return newUser(documentSnapshot.id, data?.nickname, data?.email);
+  return newUser(
+    newUserId(documentSnapshot.id),
+    newUserNickname(data?.nickname),
+    newUserEmail(data?.email),
+  );
 };

@@ -9,7 +9,7 @@ import type { DocumentSnapshot } from "firebase/firestore";
 import type { TodoRepository } from "src/domain/repository/todo";
 
 export const createTodoRepository = (
-  firestore: FirestoreClient
+  firestore: FirestoreClient,
 ): TodoRepository => {
   const createTodo = async (todo: Todo): Promise<TodoId> => {
     try {
@@ -77,7 +77,7 @@ export const createTodoRepository = (
  * @returns Todo
  */
 const convertDocumentSnapshotToTodo = (
-  documentSnapshot: DocumentSnapshot
+  documentSnapshot: DocumentSnapshot,
 ): Todo => {
   const data = documentSnapshot.data();
   return newTodo(
@@ -85,6 +85,6 @@ const convertDocumentSnapshotToTodo = (
     data?.title,
     data?.content,
     data?.status,
-    data?.dueDate
+    data?.dueDate,
   );
 };
