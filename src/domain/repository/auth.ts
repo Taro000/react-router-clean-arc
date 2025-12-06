@@ -1,9 +1,12 @@
-import type { CredentialData, LoginRequest } from "src/domain/entity/auth";
+import type {
+  CredentialData,
+  LoginRequest,
+  RegisterUserRequest,
+} from "~/domain/entity/auth";
 
 export interface AuthRepository {
   createUserWithEmailPassword: (
-    email: string,
-    password: string,
+    registerUserRequest: RegisterUserRequest,
   ) => Promise<CredentialData>;
   signInWithEmailPassword: (
     loginRequest: LoginRequest,

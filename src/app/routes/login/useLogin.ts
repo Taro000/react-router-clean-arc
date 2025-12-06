@@ -3,10 +3,12 @@ import { createAuthRepository } from "~/interface/adapter/auth";
 import { createAuthUsecase } from "~/usecase/interactor/auth";
 import { newUserEmail } from "~/domain/entity/user";
 import { newUserPassword } from "~/domain/entity/auth";
+import { createUserRepository } from "~/interface/adapter/user";
 
 const firebaseApp = createFirebaseApp();
 const authRepository = createAuthRepository(firebaseApp.auth);
-const authUsecase = createAuthUsecase(authRepository);
+const userRepository = createUserRepository(firebaseApp.firestore);
+const authUsecase = createAuthUsecase(authRepository, userRepository);
 
 export type LoginActionData = {
   userId: string | undefined;

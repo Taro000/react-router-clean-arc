@@ -1,31 +1,25 @@
-import type { FirebaseAuthClient } from "src/interface/port/auth";
-import type { AuthRepository } from "src/domain/repository/auth";
-import type { CredentialData, LoginRequest } from "src/domain/entity/auth";
-import { newCredentialData } from "src/domain/entity/auth";
-import { newUserId } from "src/domain/entity/user";
+import type { FirebaseAuthClient } from "~/interface/port/auth";
+import type { AuthRepository } from "~/domain/repository/auth";
+import type {
+  CredentialData,
+  LoginRequest,
+  RegisterUserRequest,
+} from "~/domain/entity/auth";
+import { newCredentialData } from "~/domain/entity/auth";
+import { newUserId } from "~/domain/entity/user";
 
+/*********************************************
+ * 認証リポジトリを作成する
+ **********************************************/
 export const createAuthRepository = (
   auth: FirebaseAuthClient,
 ): AuthRepository => {
-  const createUserWithEmailPassword = async (
-    email: string,
-    password: string,
-  ): Promise<CredentialData> => {
-    try {
-      const userCredential = await auth.createUserWithEmailPassword(
-        email,
-        password,
-      );
-      const userId = userCredential.user.uid;
-      const accessToken = await userCredential.user.getIdToken();
-
-      const userAuth = newCredentialData(newUserId(userId), accessToken);
-      return userAuth;
-    } catch (error) {
-      throw error;
-    }
-  };
-
+  /**
+   * メールアドレスとパスワードでログインする
+   * @param loginRequest - ログインリクエスト
+   * @returns CredentialData - ユーザーの認証情報
+   * @throws {Error} ログインできなかった場合
+   */
   const signInWithEmailPassword = async (
     loginRequest: LoginRequest,
   ): Promise<CredentialData> => {
@@ -44,5 +38,29 @@ export const createAuthRepository = (
     }
   };
 
-  return { createUserWithEmailPassword, signInWithEmailPassword };
+  /**
+   * メールアドレスとパスワードでユーザーを作成する
+   * @param registerUserRequest - ユーザー登録リクエスト
+   * @returns CredentialData - ユーザーの認証情報
+   * @throws {Error} ユーザーを作成できなかった場合
+   */
+  const createUserWithEmailPassword = async (
+    registerUserRequest: RegisterUserRequest,
+  ): Promise<CredentialData> => {
+    try {
+      const userCredential = await auth.createUserWithEmailPassword(
+        registerUserRequest.email.value,
+        registerUserRequest.password.value,
+      );
+      const userId = userCredential.user.uid;
+      const accessToken = await userCredential.user.getIdToken();
+
+      const userAuth = newCredentialData(newUserId(userId), accessToken);
+      return userAuth;
+    } catch (error) {
+      throw new Error(`interfaceでエラーが発生しました: ${error}`);
+    }
+  };
+
+  return { signInWithEmailPassword, createUserWithEmailPassword };
 };

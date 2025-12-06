@@ -8,7 +8,7 @@ import {
 export default [
   index("routes/home.tsx"),
   route("/login", "routes/login/login.tsx"),
-  route("/register-user", "routes/registerUser.tsx"),
+  route("/register-user", "routes/register/registerUser.tsx"),
   route("/feeds", "routes/feed.tsx"),
   ...prefix("/users", [
     route("/:userId", "routes/top/top.tsx"),

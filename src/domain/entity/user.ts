@@ -8,8 +8,6 @@ export type User = {
   id: UserId;
   nickname: UserNickname;
   email: UserEmail;
-  createdAt: UserCreatedAt;
-  updatedAt: UserUpdatedAt;
 };
 
 const ERROR_MESSAGE_USER_CREATION_FAILED = `ユーザーの作成に失敗しました`;
@@ -29,8 +27,7 @@ export const newUser = (
     validateUserNickname(nickname);
     validateUserEmail(email);
 
-    const now = new Date();
-    return { id, nickname, email, createdAt: now, updatedAt: now };
+    return { id, nickname, email };
   } catch (error) {
     throw new Error(`${ERROR_MESSAGE_USER_CREATION_FAILED}: ${error}`);
   }
@@ -48,8 +45,7 @@ export const updateUser = (user: User): User => {
     validateUserNickname(user.nickname);
     validateUserEmail(user.email);
 
-    const now = new Date();
-    return { ...user, updatedAt: now };
+    return { ...user };
   } catch (error) {
     throw new Error(`${ERROR_MESSAGE_USER_UPDATE_FAILED}: ${error}`);
   }
@@ -85,7 +81,7 @@ const validateUserId = (id: UserId) => {
 /*********************************************
  * ニックネーム
  **********************************************/
-type UserNickname = {
+export type UserNickname = {
   description: "ニックネーム";
   value: string;
   maxLength: 20;
@@ -104,7 +100,9 @@ export const newUserNickname = (value: string): UserNickname => {
  * @param nickname - ニックネーム
  * @returns バリデーションエラーの配列
  */
-const validateUserNickname = (nickname: UserNickname): ValidationError[] => {
+export const validateUserNickname = (
+  nickname: UserNickname,
+): ValidationError[] => {
   const rules = [
     isRequired(nickname.value),
     isLongerThan(nickname.value, nickname.maxLength),
@@ -141,13 +139,3 @@ export const validateUserEmail = (email: UserEmail): ValidationError[] => {
   ];
   return rules.filter((rule) => rule !== undefined) as ValidationError[];
 };
-
-/*********************************************
- * 作成日時
- **********************************************/
-type UserCreatedAt = Date;
-
-/*********************************************
- * 更新日時
- **********************************************/
-type UserUpdatedAt = Date;

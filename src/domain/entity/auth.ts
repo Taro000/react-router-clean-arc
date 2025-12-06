@@ -1,12 +1,12 @@
-import type { UserEmail, UserId } from "src/domain/entity/user";
-import { validateUserEmail } from "src/domain/entity/user";
+import type { UserEmail, UserId, UserNickname } from "~/domain/entity/user";
+import { validateUserEmail, validateUserNickname } from "~/domain/entity/user";
 import {
   isLongerThan,
   isShorterThan,
   isRequired,
   toErrorMessage,
-} from "src/domain/service/validationRules";
-import type { ValidationError } from "src/domain/service/validationRules";
+} from "~/domain/service/validationRules";
+import type { ValidationError } from "~/domain/service/validationRules";
 
 /*********************************************
  * ログインリクエスト
@@ -123,3 +123,68 @@ export const newCredentialData = (
  * アクセストークン
  **********************************************/
 export type AccessToken = string;
+
+/*********************************************
+ * ユーザー登録リクエスト
+ **********************************************/
+export type RegisterUserRequest = {
+  nickname: UserNickname;
+  email: UserEmail;
+  password: UserPassword;
+  errorMessages: string[];
+  isValid: boolean;
+};
+
+export const newRegisterUserRequest = (
+  nickname: UserNickname,
+  email: UserEmail,
+  password: UserPassword,
+): RegisterUserRequest => {
+  let errorMessages: string[] = [];
+  errorMessages = errorMessages.concat(
+    validateUserNickname(nickname).map((error) =>
+      toErrorMessage(nickname.description, error, nickname.maxLength),
+    ),
+  );
+  errorMessages = errorMessages.concat(
+    validateUserEmail(email).map((error) =>
+      toErrorMessage(email.description, error, email.maxLength),
+    ),
+  );
+  errorMessages = errorMessages.concat(
+    validateUserPassword(password).map((error) =>
+      toErrorMessage(
+        password.description,
+        error,
+        password.maxLength,
+        password.minLength,
+      ),
+    ),
+  );
+  return {
+    nickname,
+    email,
+    password,
+    errorMessages,
+    isValid: errorMessages.length === 0,
+  };
+};
+
+/*********************************************
+ * ユーザー登録レスポンス
+ **********************************************/
+export type RegisterUserResponse = {
+  userId: UserId | undefined;
+  accessToken: AccessToken | undefined;
+  errorMessages: string[];
+  isValid: boolean;
+};
+
+export const newRegisterUserResponse = (
+  userId: UserId | undefined,
+  accessToken: AccessToken | undefined,
+  errorMessages: string[] = [],
+  isValid: boolean = false,
+): RegisterUserResponse => {
+  return { userId, accessToken, errorMessages, isValid };
+};

@@ -18,8 +18,8 @@ export const createUserRepository = (
         "users",
         user.id.value,
         {
-          nickname: user.nickname,
-          email: user.email,
+          nickname: user.nickname.value,
+          email: user.email.value,
         },
       );
       return newUserId(userId);
